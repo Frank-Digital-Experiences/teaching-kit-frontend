@@ -1,33 +1,35 @@
-import axios from "axios";
-import Link from "next/link";
-import { Course } from "../../types";
-import styles from '../../styles/LearningMaterial.module.css'
+import axios from 'axios'
+import Link from 'next/link'
+import { Course, Data } from '../../types'
+import {
+  LearningMaterialList,
+  LearningMaterialListItem,
+} from '../../styles/global'
 
+type props = { courses: Data<Course>[] }
 
-type props = { courses: Course[] };
-
-export default function Courses({ courses }: props ) {
+export default function Courses({ courses }: props) {
   return (
     <div className="container">
       <h1>Courses</h1>
-      <ul className={styles.ul}>
-        {courses.map((course: Course) => (
-          <li key={course.id} className={styles.li}>
+      <LearningMaterialList>
+        {courses.map((course) => (
+          <LearningMaterialListItem key={course.id}>
             <Link href={`/courses/${encodeURIComponent(course.id)}`}>
               <h2>{course.attributes.Title}</h2>
             </Link>
-          </li>
+          </LearningMaterialListItem>
         ))}
-      </ul>
+      </LearningMaterialList>
     </div>
-  );
+  )
 }
 
 export async function getStaticProps() {
-  const res = await axios.get(`${process.env.STRAPI_API_URL}/courses`);
-  const courses = res.data.data;
+  const res = await axios.get(`${process.env.STRAPI_API_URL}/courses`)
+  const courses = res.data.data
 
   return {
     props: { courses },
-  };
+  }
 }

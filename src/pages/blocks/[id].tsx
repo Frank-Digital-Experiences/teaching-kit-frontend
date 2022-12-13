@@ -1,22 +1,23 @@
 import axios from 'axios'
 import MetaDataContainer from '../../components/MetaDataContainer'
-import { Block as BlockType } from '../../types'
-import styles from '../../styles/LearningMaterial.module.css'
+import { Block as BlockType, Data } from '../../types'
+import { getBlocks } from '../../shared/requests/blocks/blocks'
+import { LearningMaterialContainer } from '../../styles/global'
 import { Block } from '../../components/Block'
 
-type props = { block: BlockType }
+type props = { block: Data<BlockType> }
 
 export default function BlockPage({ block }: props) {
   return (
-    <div className={styles.learningMaterialContainer}>
-      <Block block={block}></Block>
+    <LearningMaterialContainer>
+      <Block block={block} />
       <MetaDataContainer
         typeOfLearningMaterial="BLOCK"
         duration={`${block.attributes.DurationInMinutes} min`}
         authors={block.attributes.Authors}
         docxDownloadParameters={{ title: block.attributes.Title }}
       ></MetaDataContainer>
-    </div>
+    </LearningMaterialContainer>
   )
 }
 
@@ -28,10 +29,9 @@ export async function getStaticPaths() {
     }
   }
 
-  const res = await axios.get(`${process.env.STRAPI_API_URL}/blocks`)
-  const blocks = res.data.data
+  const blocks = await getBlocks()
 
-  const paths = blocks.map((block: BlockType) => ({
+  const paths = blocks.map((block) => ({
     params: { id: `${block.id}` },
   }))
 

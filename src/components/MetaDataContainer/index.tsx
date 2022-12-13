@@ -1,19 +1,24 @@
 import React from 'react'
-import styles from './MetaDataContainer.module.css'
-import { Author, Block, LearningMaterialType, Level } from '../../types'
+import { Author, Block, Data, LearningMaterialType, Level } from '../../types'
+import {
+  DownloadContainer,
+  StyledLi,
+  StyledMetaDataContainer,
+  StyledUl,
+} from './styles'
 import handleDocxDownload from '../../utils/downloadAsDocx'
 
 type DocxDownloadParameters = {
   title: string
   courseId?: number
-  blocks?: Block[]
+  blocks?: Data<Block>[]
 }
 
 export type Props = {
   typeOfLearningMaterial: LearningMaterialType
   level?: Level
   duration?: string
-  authors?: { data: Author[] }
+  authors?: { data: Data<Author>[] }
   docxDownloadParameters?: DocxDownloadParameters
   handlePptxDownload?: () => void
 }
@@ -27,23 +32,23 @@ export default function MetaDataContainer({
   handlePptxDownload,
 }: Props) {
   return (
-    <div id="meta-data-html" className={styles.metaDataContainer}>
+    <StyledMetaDataContainer id="meta-data-html">
       <h3>About this {typeOfLearningMaterial}</h3>
       {level !== undefined && <p>Level: {level}</p>}
       <p>Duration: {duration}</p>
       <h4>Authors</h4>
-      <ul className={styles.ul}>
-        {authors?.data.map((author: Author) => (
-          <li key={author.id}>
+      <StyledUl>
+        {authors?.data.map((author) => (
+          <StyledLi key={author.id}>
             {author.attributes.Name}:{' '}
             <a href={`mailto:${author.attributes.Email}`}>
               {author.attributes.Email}
             </a>
-          </li>
+          </StyledLi>
         ))}
-      </ul>
+      </StyledUl>
       <h4>Download</h4>
-      <div className={styles.downloadContainer}>
+      <DownloadContainer>
         <button
           onClick={() =>
             handleDocxDownload(
@@ -56,7 +61,7 @@ export default function MetaDataContainer({
           Docx
         </button>
         <button onClick={handlePptxDownload}>Pptx</button>
-      </div>
-    </div>
+      </DownloadContainer>
+    </StyledMetaDataContainer>
   )
 }

@@ -1,14 +1,14 @@
 import axios from 'axios'
 import { Lecture } from '../../components/Lecture'
 import MetaDataContainer from '../../components/MetaDataContainer'
+import { getLectures } from '../../shared/requests/lectures/lectures'
+import { LearningMaterialContainer } from '../../styles/global'
+import { Data, LectureWithBlock } from '../../types'
 
-import styles from '../../styles/LearningMaterial.module.css'
-import { Lecture as LectureType } from '../../types'
-
-type props = { lecture: LectureType }
+type props = { lecture: Data<LectureWithBlock> }
 export default function LecturePage({ lecture }: props) {
   return (
-    <div className={styles.learningMaterialContainer}>
+    <LearningMaterialContainer>
       <Lecture lecture={lecture} />
       <MetaDataContainer
         typeOfLearningMaterial="LECTURE"
@@ -20,7 +20,7 @@ export default function LecturePage({ lecture }: props) {
           blocks: lecture.attributes.Blocks.data,
         }}
       ></MetaDataContainer>
-    </div>
+    </LearningMaterialContainer>
   )
 }
 
@@ -32,10 +32,9 @@ export async function getStaticPaths() {
     }
   }
 
-  const res = await axios.get(`${process.env.STRAPI_API_URL}/lectures`)
-  const lectures = res.data.data
+  const lectures = await getLectures()
 
-  const paths = lectures.map((lecture: LectureType) => ({
+  const paths = lectures.map((lecture) => ({
     params: { id: `${lecture.id}` },
   }))
 

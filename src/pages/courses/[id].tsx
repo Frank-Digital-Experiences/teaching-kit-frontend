@@ -3,19 +3,23 @@ import { useState } from 'react'
 import LearningMaterial from '../../components/LearningMaterial'
 import LearningMaterialEnding from '../../components/LearningMaterialEnding'
 import MetaDataContainer from '../../components/MetaDataContainer'
-import { Course as CourseType, Lecture } from '../../types'
-import styles from '../../styles/LearningMaterial.module.css'
+import { getCourses } from '../../shared/requests/courses/courses'
+import {
+  LearningMaterialContainer,
+  LearningMaterialOverview,
+} from '../../styles/global'
+import { CourseWithLecturesAndBlocks, Data } from '../../types'
 
-type props = { course: CourseType }
+type Props = { course: Data<CourseWithLecturesAndBlocks> }
 
-export default function CoursePage({ course }: props) {
+export default function CoursePage({ course }: Props) {
   const [showLectures, setShowLectures] = useState(false)
 
   const handlePptxDownload = () => {}
 
   return (
-    <div className={styles.learningMaterialContainer}>
-      <div id="source-html" className={styles.learningMaterialOverview}>
+    <LearningMaterialContainer>
+      <LearningMaterialOverview id="source-html">
         <LearningMaterial
           Title={course.attributes.Title}
           Abstract={course.attributes.Abstract}
@@ -27,7 +31,7 @@ export default function CoursePage({ course }: props) {
         </h2>
         {showLectures && (
           <ul>
-            {course.attributes.Lectures?.data.map((lecture: Lecture) => (
+            {course.attributes.Lectures?.data.map((lecture) => (
               <li key={lecture.id}>{lecture.attributes.Title}</li>
             ))}
           </ul>
@@ -36,7 +40,7 @@ export default function CoursePage({ course }: props) {
           Acknowledgment={course.attributes.Acknowledgement}
           CiteAs={course.attributes.CiteAs}
         />
-      </div>
+      </LearningMaterialOverview>
       <MetaDataContainer
         typeOfLearningMaterial="COURSE"
         level={course.attributes.Level}
@@ -48,7 +52,7 @@ export default function CoursePage({ course }: props) {
         }}
         handlePptxDownload={handlePptxDownload}
       ></MetaDataContainer>
-    </div>
+    </LearningMaterialContainer>
   )
 }
 
@@ -60,10 +64,9 @@ export async function getStaticPaths() {
     }
   }
 
-  const res = await axios.get(`${process.env.STRAPI_API_URL}/courses`)
-  const courses = res.data.data
+  const courses = await getCourses()
 
-  const paths = courses.map((course: CourseType) => {
+  const paths = courses.map((course) => {
     return {
       params: { id: `${course.id}` },
     }

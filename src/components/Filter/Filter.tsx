@@ -4,15 +4,9 @@ import {
   RefObject,
   SetStateAction,
   useEffect,
-  useRef,
   useState,
 } from 'react'
 import useDebounce from '../../hooks/useDebouce'
-import {
-  Data,
-  KeywordAttributes,
-  searchForKeywords,
-} from '../../shared/requests/filter'
 import Chip from '../Chip/Chip'
 import FilterDropdownListItem from './FilterDropdownListItem/FilterDropdownListItem'
 
@@ -29,10 +23,12 @@ import {
   SelectedKeywordWrapper,
 } from './styles'
 import useOutsideClickAlerter from '../../hooks/useOutsideClickAlerter'
+import { Data, Keyword } from '../../types'
+import { searchForKeywords } from '../../shared/requests/keywords/keywords'
 
 type Props = {
-  selectedKeywords: Data<KeywordAttributes>[]
-  setSelectedKeywords: Dispatch<SetStateAction<Data<KeywordAttributes>[]>>
+  selectedKeywords: Data<Keyword>[]
+  setSelectedKeywords: Dispatch<SetStateAction<Data<Keyword>[]>>
 }
 
 // Note that Strapi's default value for page sizes currently is 25. Hence,
@@ -46,9 +42,7 @@ export default function Filter({
   const wrapperRef: RefObject<HTMLDivElement> = createRef()
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearchTerm = useDebounce(searchTerm, 200)
-  const [matchingKeywords, setMatchingKeywords] = useState<
-    Data<KeywordAttributes>[]
-  >([])
+  const [matchingKeywords, setMatchingKeywords] = useState<Data<Keyword>[]>([])
   const [doShowResultsList, setDoShowResultsList] = useState(false)
   useOutsideClickAlerter(wrapperRef, () => setDoShowResultsList(false))
 
@@ -64,7 +58,7 @@ export default function Filter({
     }
   }
 
-  const selectKeyword = (selectedKeyword: Data<KeywordAttributes>) =>
+  const selectKeyword = (selectedKeyword: Data<Keyword>) =>
     setSelectedKeywords((previousState) => [
       ...new Set([...previousState, selectedKeyword]),
     ])

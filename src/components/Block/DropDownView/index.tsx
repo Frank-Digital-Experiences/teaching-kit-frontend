@@ -1,17 +1,16 @@
-import Block from "./Block";
-import styles from "./Block.module.css";
-import { Block as BlockType } from "../../../types";
+import { Data, Block as BlockType } from '../../../types'
+import Block from './Block'
+import { StyledBlocks } from './styles'
 
-export type Props = { blocks?: BlockType[] };
-
+export type Props = { blocks?: Data<BlockType>[] }
 export default function Blocks({ blocks }: Props) {
   return (
-    <ul className={styles.ul}>
-      {blocks?.map((block: any) => (
-        <li key={block.id} className={styles.li}>
+    <StyledBlocks>
+      {blocks?.map((block) => (
+        <li key={block.id}>
           <Block block={block.attributes} />
         </li>
       ))}
-    </ul>
-  );
+    </StyledBlocks>
+  )
 }

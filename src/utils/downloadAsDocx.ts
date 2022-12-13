@@ -2,20 +2,19 @@ import axios from 'axios'
 import ReactDOMServer from 'react-dom/server'
 import { Block } from '../components/Block'
 import { Lecture } from '../components/Lecture'
+import { getCourseWithLecturesAndBlocks } from '../shared/requests/courses/courses'
 
-import { Block as BlockType } from '../types'
-import { Lecture as LectureType } from '../types'
+import { Block as BlockType, Data } from '../types'
 
 export default async function handleDocxDownload(
   title?: string,
   courseId?: number,
-  blocks?: BlockType[]
+  blocks?: Data<BlockType>[]
 ) {
   const header =
     "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
     "xmlns:w='urn:schemas-microsoft-com:office:word' " +
     "xmlns='http://www.w3.org/TR/REC-html40'>" + // Old url?
-    "xmlns='https://www.w3.org/TR/css-multicol-1/'>" +
     `<head><meta charset='utf-8'><title>${title}</title></head><body>`
   const footer = '</body></html>'
   // Add metaData
@@ -30,20 +29,18 @@ export default async function handleDocxDownload(
 
   // Add LearningMaterial children's content
   if (courseId) {
-    const res = await axios.get(
-      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/courses/${courseId}?populate[Lectures][populate][0]=Blocks`
-    )
-    const lectures = res.data.data.attributes.Lectures.data
+    const res = await getCourseWithLecturesAndBlocks(courseId.toString())
+    const lectures = res.attributes.Lectures.data
 
-    lectures?.map((lecture: LectureType) => {
+    lectures?.map((lecture) => {
       sourceHTML += ReactDOMServer.renderToString(Lecture({ lecture }))
 
-      lecture.attributes.Blocks.data?.map((block: BlockType) => {
+      lecture.attributes.Blocks.data?.map((block) => {
         sourceHTML += ReactDOMServer.renderToString(Block({ block }))
       })
     })
   } else {
-    blocks?.map((block: BlockType) => {
+    blocks?.map((block) => {
       sourceHTML += ReactDOMServer.renderToString(Block({ block }))
     })
   }
