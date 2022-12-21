@@ -25,13 +25,19 @@ export type LearningOutcome = {
 
 export type Affiliation = {
   Affiliation: string
-  Authors: Author[]
+}
+
+export type DeepAffiliation = Affiliation & {
+  Authors: Data<Author[]>
 }
 
 export type Author = {
   Name: string
   Email?: string
   ORCID?: string
+}
+
+export type DeepAuthor = Author & {
   Affiliation: Data<Affiliation>
 }
 
@@ -74,7 +80,7 @@ export type Lecture = {
   publishedAt: string
 }
 
-export type LectureWithBlock = Lecture & {
+export type DeepLecture = Lecture & {
   Blocks: { data: Data<Block>[] }
 }
 
@@ -92,6 +98,6 @@ export type Course = {
   publishedAt: string
 }
 
-export type CourseWithLecturesAndBlocks = Course & {
-  Lectures: { data: Data<LectureWithBlock>[] }
+export type TwoLevelsDeepCourse = Course & {
+  Lectures: { data: Data<DeepLecture>[] }
 }
