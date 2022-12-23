@@ -1,5 +1,9 @@
 import axios from 'axios'
-import { Course, TwoLevelsDeepCourse } from '../../../types'
+import {
+  Course,
+  CourseThreeLevelsDeep,
+  CourseTwoLevelsDeep,
+} from '../../../types'
 import { Response, ResponseArray } from '../types'
 
 const ENDPOINT = `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/courses`
@@ -11,7 +15,7 @@ export const getCourses = async () => {
 }
 
 export const getCourseWithLecturesAndBlocks = async (courseId: string) => {
-  const response: Response<TwoLevelsDeepCourse> = await axios.get(
+  const response: Response<CourseThreeLevelsDeep> = await axios.get(
     `${ENDPOINT}/${courseId}?populate[Lectures][populate][0]=Blocks`
   )
   return response.data.data
@@ -67,8 +71,10 @@ export const filterCourseOnKeywordsAndAuthors = async (
   const andKeywords = keywordsFilterString.length > 0 ? '&' : ''
   const andAuthors = authorsFilterString.length > 0 ? '&' : ''
 
-  const filterString = `${pagination}${andKeywords}${keywordsFilterString}${andAuthors}${authorsFilterString}`
-  const response: ResponseArray<Course> = await axios.get(
+  const filters = `${pagination}${andKeywords}${keywordsFilterString}${andAuthors}${authorsFilterString}`
+  const filterString =
+    filters.length > 0 ? `${filters}&populate=*` : '?populate=*'
+  const response: ResponseArray<CourseTwoLevelsDeep> = await axios.get(
     `${ENDPOINT}${filterString}`
   )
   return response.data

@@ -20,11 +20,12 @@ const FilterGroup = styled.div`
 
 const Styled = { FilterGroup }
 
-const defaultPageNumber = 1
+const DEFAULT_PAGE_NUMBER = 1
+const DEFAULT_MATCHES_PER_PAGE = 10
 
 const defaultPagination = {
-  page: defaultPageNumber,
-  pageSize: 25,
+  page: DEFAULT_PAGE_NUMBER,
+  pageSize: DEFAULT_MATCHES_PER_PAGE,
   pageCount: 1,
   total: 0,
 }
@@ -34,7 +35,8 @@ export default function Discover() {
   const [selectedAuthors, setSelectedAuthors] = useState<FilterType[]>([])
   const [filterResults, setFilterResults] = useState<Data<Course>[]>([])
   const [pagination, setPagination] = useState<Pagination>(defaultPagination)
-  const [currentPageNumber, setCurrentPageNumber] = useState(defaultPageNumber)
+  const [currentPageNumber, setCurrentPageNumber] =
+    useState(DEFAULT_PAGE_NUMBER)
 
   useEffect(() => {
     onSelectedKeywordsChange(
@@ -52,7 +54,8 @@ export default function Discover() {
     const filterResponse = await filterCourseOnKeywordsAndAuthors(
       keywords.map((keyword) => keyword.title),
       authors.map((author) => author.title),
-      currentPageNumber
+      currentPageNumber,
+      DEFAULT_MATCHES_PER_PAGE
     )
 
     setFilterResults(filterResponse.data)

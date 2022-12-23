@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { OnPrimary40, Primary40 } from "../../../styles/global";
-
+import styled from '@emotion/styled'
+import { montserrat } from '../../../styles/fonts'
+import { OnPrimary40, Primary40 } from '../../../styles/global'
 
 export const Card = styled.div`
   width: 100%;
@@ -15,4 +15,21 @@ export const Card = styled.div`
 
 export const MetaData = styled.p`
   margin-top: 2rem;
+`
+
+export const Markdown = styled.div`
+  max-height: 10rem;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+
+  p {
+    strong {
+      font-family: ${montserrat['500'].style.fontFamily};
+    }
+  }
 `
