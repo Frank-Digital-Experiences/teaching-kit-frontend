@@ -7,13 +7,13 @@ export type Pagination = {
   total: number
 }
 
-type MetaData = {
+type Metadata = {
   pagination: Pagination
 }
 
 export type ResponseArrayData<T> = {
   data: Data<T>[]
-  meta: MetaData
+  meta: Metadata
 }
 
 export type ResponseArray<T> = {

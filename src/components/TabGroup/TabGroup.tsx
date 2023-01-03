@@ -1,18 +1,16 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Box'
 import { filterCourseOnKeywordsAndAuthors } from '../../shared/requests/courses/courses'
 import { filterLectureOnKeywordsAndAuthors } from '../../shared/requests/lectures/lectures'
 import {
   BlockOneLevelDeep,
   CourseTwoLevelsDeep,
   Data,
-  LearningMaterialType,
   LectureTwoLevelsDeep,
 } from '../../types'
-import { MetaData, ResponseArrayData } from '../../shared/requests/types'
+import { Metadata, ResponseArrayData } from '../../shared/requests/types'
 import CardList from '../CardList/CardList'
 import PaginationController from '../PaginationController/PaginationController'
 import { CardType } from '../CardList/Card/Card'
@@ -132,7 +130,7 @@ const TabGroup = ({ selectedKeywords, selectedAuthors }: Props) => {
   }
 
   const getPaginationController = (
-    metaData: MetaData,
+    metaData: Metadata,
     currentPage: number,
     setCurrentPageNumber: (newPageNumber: number) => void
   ) => {

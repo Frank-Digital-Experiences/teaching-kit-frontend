@@ -4,6 +4,7 @@ import Filter, { Filter as FilterType } from '../../components/Filter/Filter'
 import TabGroup from '../../components/TabGroup/TabGroup'
 import { searchForAuthors } from '../../shared/requests/authors/authors'
 import { searchForKeywords } from '../../shared/requests/keywords/keywords'
+import { PageContainer } from '../../styles/global'
 
 // Note that Strapi's default value for page sizes currently is 25. Hence,
 // if this constant is increased to > 25, we will still only get 25 results.
@@ -14,7 +15,11 @@ const FilterGroup = styled.div`
   gap: 3rem;
 `
 
-const Styled = { FilterGroup }
+const H2 = styled.h2`
+  font-size: 2.8rem;
+`
+
+const Styled = { FilterGroup, H2 }
 
 export default function Discover() {
   const [selectedKeywords, setSelectedKeywords] = useState<FilterType[]>([])
@@ -37,10 +42,10 @@ export default function Discover() {
   }, [])
 
   return (
-    <div className='container'>
+    <PageContainer>
       <h1>Learning Material</h1>
       <div>
-        <h2>Apply filter</h2>
+        <Styled.H2>Apply filter</Styled.H2>
         <Styled.FilterGroup>
           <Filter
             selectedFilters={selectedKeywords}
@@ -58,6 +63,7 @@ export default function Discover() {
           />
         </Styled.FilterGroup>
       </div>
+      <Styled.H2>All Learning Material</Styled.H2>
       <div>
         <TabGroup
           selectedKeywords={selectedKeywords.map(
@@ -68,6 +74,6 @@ export default function Discover() {
           )}
         />
       </div>
-    </div>
+    </PageContainer>
   )
 }
