@@ -1,16 +1,11 @@
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Author, BlockOneLevelDeep, Data, Level } from '../../types'
-import handleDocxDownload from '../../utils/downloadAsDocx'
+import { DownloadError } from '../../utils/downloadAsDocx/downloadAsDocx'
+import Alert from '../Alert/Alert'
 import Button from '../Button/Button'
 
 import * as Styled from './styles'
-
-type DocxDownloadParameters = {
-  title: string
-  courseId?: number
-  blocks?: Data<BlockOneLevelDeep>[]
-}
 
 type PptxDownloadParameters = {
   data: Data<BlockOneLevelDeep>
@@ -20,7 +15,7 @@ export type Props = {
   level?: Level
   duration?: string
   authors?: { data: Data<Author>[] }
-  docxDownloadParameters: DocxDownloadParameters
+  downloadAsDocx: () => Promise<void | DownloadError>
   pptxDownloadParameters?: PptxDownloadParameters
 }
 
@@ -34,11 +29,24 @@ export default function MetadataContainer({
   level,
   duration,
   authors,
-  docxDownloadParameters,
+  downloadAsDocx,
   pptxDownloadParameters,
 }: Props) {
+  const [docxDownloadIsLoading, setDocxDownloadIsLoading] = useState(false)
+  const [docxDowloadErrored, setDocxDownloadErrored] = useState(false)
+
+  const downloadBlock = async () => {
+    const delayedLoading = setTimeout(() => setDocxDownloadIsLoading(true), 300)
+    const download = await downloadAsDocx()
+    if (download?.hasError) {
+      setDocxDownloadErrored(true)
+    }
+    clearTimeout(delayedLoading)
+    setDocxDownloadIsLoading(false)
+  }
+
   return (
-    <Styled.MetadataContainer id='meta-data-html'>
+    <Styled.MetadataContainer>
       {level !== undefined ? (
         <Styled.HeadingSet>
           <h6>Level</h6>
@@ -66,28 +74,29 @@ export default function MetadataContainer({
           </Styled.Ul>
         </Styled.HeadingSet>
       ) : null}
-      {pptxDownloadParameters !== undefined ||
-      docxDownloadParameters !== undefined ? (
-        <Styled.HeadingSet>
-          <h6>Download</h6>
-          <Styled.DownloadButtonsContainer>
-            <Button
-              onClick={() =>
-                handleDocxDownload(
-                  docxDownloadParameters?.title,
-                  docxDownloadParameters?.courseId,
-                  docxDownloadParameters?.blocks
-                )
-              }
-            >
-              DOCX
-            </Button>
-            {pptxDownloadParameters !== undefined ? (
-              <DynamicPptxDownloadButton block={pptxDownloadParameters.data} />
-            ) : null}
-          </Styled.DownloadButtonsContainer>
-        </Styled.HeadingSet>
-      ) : null}
+      <Styled.HeadingSet>
+        <h6>Download</h6>
+        <Styled.DownloadButtonsContainer>
+          <Button
+            onClick={() => downloadBlock()}
+            isLoading={docxDownloadIsLoading}
+          >
+            DOCX
+          </Button>
+          {pptxDownloadParameters !== undefined ? (
+            <DynamicPptxDownloadButton block={pptxDownloadParameters.data} />
+          ) : null}
+        </Styled.DownloadButtonsContainer>
+        {docxDowloadErrored === true ? (
+          <Styled.Alert>
+            <Alert
+              title='The download failed'
+              text='Something went wrong when trying to download the DOCX document...'
+              type='ERROR'
+            />
+          </Styled.Alert>
+        ) : null}
+      </Styled.HeadingSet>
     </Styled.MetadataContainer>
   )
 }
