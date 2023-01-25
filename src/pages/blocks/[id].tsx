@@ -10,6 +10,7 @@ import styled from '@emotion/styled'
 import LearningMaterial from '../../components/LearningMaterial'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import { handleBlockDocxDownload } from '../../utils/downloadAsDocx/downloadAsDocx'
+import { handleBlockPptxDownload } from '../../utils/downloadAsPptx/handlePptxDownloads'
 import { ResponseArray } from '../../shared/requests/types'
 
 const BlockContentWrapper = styled.div`
@@ -38,7 +39,7 @@ export default function BlockPage({ block }: Props) {
         duration={summarizeDurations([block])}
         authors={block.attributes.Authors}
         downloadAsDocx={() => handleBlockDocxDownload(block)}
-        pptxDownloadParameters={{ data: block }}
+        downloadAsPptx={() => handleBlockPptxDownload(block)}
       />
     </LearningMaterialContainer>
   )
