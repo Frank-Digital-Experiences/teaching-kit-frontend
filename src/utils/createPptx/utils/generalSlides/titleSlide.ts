@@ -1,8 +1,8 @@
 import PptxGenJS from 'pptxgenjs'
 import {
-  masterDescriptionSlide,
   descriptionTitle,
-} from '../../pptxConfigurations'
+  masterDescriptionSlide,
+} from '../../pptxConfiguration/masterSlide'
 
 const createTitleSlide = (lectureTitle: string, pptx: PptxGenJS) => {
   // Master slides

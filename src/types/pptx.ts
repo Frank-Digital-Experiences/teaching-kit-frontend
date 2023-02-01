@@ -1,16 +1,18 @@
+import PptxGenJS from 'pptxgenjs'
+
 type PptxSlideListContent = {
   text: string
 }
 
 export type PptxSlide = {
-  title?: string
+  title: string
+  heading: string
   mainContent?: string[]
+  mainContentStyling?: PptxGenJS.TextPropsOptions
   speakerNotes?: string
   image?: string
   headingStyling?: {}
-  mainContentStyling?: any
-  bulletStyling?: any
-  heading?: string
+  listStyling?: PptxGenJS.TextPropsOptions
   list?: PptxSlideListContent[]
 }
 
