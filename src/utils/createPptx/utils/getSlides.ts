@@ -17,17 +17,12 @@ const getSlides = (blockSlides: PptxSlide[], pptx: PptxGenJS) => {
     }
 
     if (pptxSlide?.mainContent !== undefined) {
-      contentSlide.addText(
-        pptxSlide?.mainContent?.join(''),
-        pptxSlide.mainContentStyling
-      )
+      contentSlide.addText(pptxSlide.mainContent, pptxSlide.mainContentStyling)
     }
 
     //Bullet points
     if (pptxSlide.list) {
-      const bulletString = pptxSlide.list.map((item) => item.text).join('\n')
-
-      contentSlide.addText(`${bulletString}`, pptxSlide.listStyling)
+      contentSlide.addText(pptxSlide.list, pptxSlide.listStyling)
     }
 
     contentSlide.addNotes(`${pptxSlide.speakerNotes}`)
