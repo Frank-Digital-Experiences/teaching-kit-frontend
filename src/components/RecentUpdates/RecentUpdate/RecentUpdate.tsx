@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import { RecentUpdateType } from '../../../shared/requests/recent/recent'
-import { AccentPink, AccentGreen, AccentYellow } from '../../../styles/global'
-import Badge from '../../Badge/Badge'
+import Badge, { BadgeColor } from '../../Badge/Badge'
 import ClockIcon from '../../../../public/icons/clock.svg'
 import SignalStrengthIcon from '../../../../public/icons/signal-strength.svg'
 import * as Styled from './styles'
@@ -12,20 +11,20 @@ type Props = {
 }
 
 const RecentUpdate = ({ recentUpdate }: Props) => {
-  let typeColor = 'none'
+  let typeColor: BadgeColor = 'yellow'
   let href = '/'
   let levelExplanation = 'Level is'
   switch (recentUpdate.Type) {
-    case 'Course':
-      typeColor = AccentPink
-      href = `/courses/${recentUpdate.Id}`
-      break
     case 'Lecture':
-      typeColor = AccentGreen
+      typeColor = 'green'
       href = `/lectures/${recentUpdate.Id}`
       break
+    case 'Course':
+      typeColor = 'pink'
+      href = `/courses/${recentUpdate.Id}`
+      break
     case 'Block':
-      typeColor = AccentYellow
+      typeColor = 'yellow'
       href = `/blocks/${recentUpdate.Id}`
       break
     default:

@@ -32,9 +32,13 @@ export const Error99 = '#FFDAD7'
 export const OnError99 = '#242424'
 // End of design tokens
 
+export const AccentPinkLighter = '#F9F0F0'
 export const AccentPink = '#EACCCC'
-export const AccentGreen = '#99BFAA'
-export const AccentYellow = '#BFAA99'
+export const AccentPinkDarker = '#AD4848'
+export const AccentGreen = '#D4EACC'
+export const AccentGreenDarker = '#43742F'
+export const AccentYellow = '#F3F5B4'
+export const AccentYellowDarker = '#6E7113'
 
 export const breakpoints = {
   xs: '480px',
@@ -81,7 +85,6 @@ export const ButtonWithoutDefaultStyle = styled.button`
   padding: 0px;
   font: inherit;
   cursor: pointer;
-  outline: inherit;
 `
 
 export const LearningMaterialContainer = styled.div`
