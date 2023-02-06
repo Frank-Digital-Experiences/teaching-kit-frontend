@@ -1,5 +1,4 @@
 import axios from 'axios'
-import styled from '@emotion/styled'
 import CardList from '../../components/CardList/CardList'
 import LearningMaterial from '../../components/LearningMaterial'
 import LearningMaterialBadge from '../../components/LearningMaterial/LearningMaterialBadge/LearningMaterialBadge'
@@ -9,7 +8,6 @@ import { filterOutOnlyPublishedEntriesOnLecture } from '../../shared/requests/ut
 import {
   BlockContentWrapper,
   LearningMaterialOverview,
-  mq,
   PageContainer,
 } from '../../styles/global'
 import { Data, Lecture, LectureTwoLevelsDeep } from '../../types'
@@ -21,7 +19,7 @@ type Props = { lecture: Data<LectureTwoLevelsDeep> }
 
 export default function LecturePage({ lecture }: Props) {
   return (
-    <PageContainer>
+    <PageContainer hasTopPadding>
       <LearningMaterialOverview>
         <LearningMaterial
           type='LECTURE'
@@ -32,7 +30,7 @@ export default function LecturePage({ lecture }: Props) {
           citeAs={lecture.attributes.CiteAs}
         />
         <MetadataContainer
-          level={lecture.attributes.Level.data?.attributes.Level}
+          level={lecture.attributes.Level}
           duration={summarizeDurations(lecture.attributes.Blocks.data)}
           authors={lecture.attributes.LectureCreators}
           downloadAsDocx={() => handleLectureDocxDownload(lecture)}

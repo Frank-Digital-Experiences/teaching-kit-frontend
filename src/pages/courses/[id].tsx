@@ -13,13 +13,13 @@ import {
 import { Course, CourseThreeLevelsDeep, Data } from '../../types'
 import { handleCourseDocxDownload } from '../../utils/downloadAsDocx/downloadAsDocx'
 import downloadCoursePptx from '../../utils/downloadAsPptx/downloadCourseAsPptx'
-import { levelToString, summarizeDurations } from '../../utils/utils'
+import { summarizeDurations } from '../../utils/utils'
 
 type Props = { course: Data<CourseThreeLevelsDeep> }
 
 export default function CoursePage({ course }: Props) {
   return (
-    <PageContainer>
+    <PageContainer hasTopPadding>
       <LearningMaterialOverview>
         <LearningMaterial
           type='COURSE'
@@ -31,7 +31,7 @@ export default function CoursePage({ course }: Props) {
           citeAs={course.attributes.CiteAs}
         />
         <MetadataContainer
-          level={levelToString(course.attributes.Level)}
+          level={course.attributes.Level}
           duration={summarizeDurations(
             course.attributes.Lectures.data
               .map((lecture) =>
