@@ -17,6 +17,22 @@ const getSlides = (blockSlides: PptxSlide[], pptx: PptxGenJS) => {
       contentSlide.addText(pptxSlide.mainContent, pptxSlide.mainContentStyling)
     }
 
+    if (pptxSlide.tables) {
+      let index = 0
+      for (const table of pptxSlide.tables) {
+        let slide = contentSlide
+        if (index !== 0 || pptxSlide?.mainContent !== undefined) {
+          slide = pptx.addSlide()
+        }
+        slide.addText(`${pptxSlide.heading}`, pptxSlide.headingStyling)
+        slide.addTable(
+          table,
+          pptxSlide.tableStyling ? pptxSlide.tableStyling[index] : {}
+        )
+        index += 1
+      }
+    }
+
     contentSlide.addNotes(`${pptxSlide.speakerNotes}`)
 
     if (pptxSlide?.citeAs !== undefined) {
