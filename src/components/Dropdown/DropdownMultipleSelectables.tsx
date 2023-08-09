@@ -49,7 +49,9 @@ export default function DropdownMultipleSelectables({
   useEffect(() => {
     const onSearchTermChange = async (searchTerm: string) => {
       const matchingItems = await getItems(searchTerm)
+
       setMatchingItems(matchingItems)
+
       if (searchTerm.length > 1) {
         setDoShowResultsList(true)
       }
@@ -85,8 +87,8 @@ export default function DropdownMultipleSelectables({
     itemIsSelected(item) ? deselectItem(item.id.toString()) : selectItem(item)
   }
 
-  const renderAllResults = () =>
-    matchingItems.map((matchingItem, index) => (
+  const renderAllResults = () =>   
+    matchingItems.sort((a, b) => a.label.localeCompare(b.label)).map((matchingItem, index) => (
       <DropdownListItem
         key={index}
         label={matchingItem.label}
